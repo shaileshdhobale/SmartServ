@@ -1,0 +1,159 @@
+<style type="text/css">
+    body {
+        color: #566787;
+        background: #f5f5f5;
+        font-family: 'Varela Round', sans-serif;
+        font-size: 13px;
+    }
+    .table-wrapper {
+        background: #fff;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 3px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+    .table-title {
+        padding-bottom: 15px;
+        background: #435d7d;
+        color: #fff;
+        padding: 16px 30px;
+        margin: -20px -25px 10px;
+        border-radius: 3px 3px 0 0;
+    }
+</style>
+<div id = "form1" class="container" ng-controller="formCtrl">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Manage <b>Expense</b></h2>
+                </div>
+                <div class="col-sm-6" style=" PADDING-LEFT: 165PX;">
+                    <a href="#addExpenseModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Expense</span></a>
+
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="expense in expenseArray">
+                <td>{{expense.name}}</td>
+                <td>{{expense.description}}</td>
+                <td>{{expense.amount}}</td>
+                <td>{{expense.createdDate | date: "dd.MM.y h:mm:ss" }}</td>
+                <td>{{expense.updatedDate | date: "dd.MM.y h:mm:ss" }}</td>
+                <td>
+                    <a href="#editExpenseModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit" ng-click="editExpense(expense)">&#xE254;</i></a>
+                    <a href="#deleteExpenseModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="addExpenseModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="expenseForm" novalidate>
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Expense</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="expense.name" required>
+                        <span style="float:left;color:red" ng-show="expenseForm.submitted&&expenseForm.name.$error.required || expenseForm.name.$touched &&
+                        expenseForm.name.$error.required || expenseForm.description.$dirty && expenseForm.amount.$dirty && expenseForm.name.$error.required">Name is required</span>
+                    <span style="float:left;color:red" ng-show="expenseForm.name.$error.pattern">Please enter valid Name</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control"  ng-model="expense.description" required></textarea>
+                        <span style="float:left;color:red" ng-show="expenseForm.submitted&&expenseForm.description.$error.required || expenseForm.description.$touched &&
+                        expenseForm.description.$error.required || expenseForm.name.$dirty && expenseForm.amount.$dirty && expenseForm.description.$error.required">Name is required</span>
+                    <span style="float:left;color:red" ng-show="expenseForm.description.$error.pattern">Please enter valid Name</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" min="1" class="form-control" ng-model="expense.amount" required>
+                        <span style="float:left;color:red" ng-show="expenseForm.submitted&&expenseForm.amount.$error.required || expenseForm.amount.$touched &&
+                        expenseForm.amount.$error.required ||  expenseForm.mobile.$dirty && expenseForm.description.$error.required">Name is required</span>
+                    <span style="float:left;color:red" ng-show="expenseForm.amount.$error.pattern">Please enter valid Name</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" data-dismiss="modal" value="Add Expense" ng-click="addExpense()">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal HTML -->
+<div id="editExpenseModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="expenseForm" novalidate>
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Expense</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="{{expense.name}}" required>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control"  ng-model="expense.description" required></textarea>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" min="1" class="form-control" ng-model="expense.amount" required>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" data-dismiss="modal" value="Add Expense" ng-click="addExpense()">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteExpenseModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Expense</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

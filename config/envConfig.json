@@ -1,0 +1,11 @@
+{
+    "environmentType": "local",
+    "envConfig": {
+        "local": {
+            "port": 8000,
+            "securePort": 443,
+            "dbConnectionString": "mongodb://shailesh:Abcd$123@ds123976.mlab.com:23976/expense_manager",
+            "logLevel": "DEBUG"
+        }
+    }
+}
