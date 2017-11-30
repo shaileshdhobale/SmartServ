@@ -15,7 +15,7 @@ var logger = log4js.getLogger('[dao/db]');
 logger.setLevel(envConfig.logLevel);
 
 
-//Function to add appointment and send response to client.
+//Function to add Expense and send response to client.
 var addExpense = function(req, res) {
 	var METHOD_NAME = "[addExpense] ";
 	var response;
@@ -64,23 +64,14 @@ var addExpense = function(req, res) {
 		}
 	})
 };
-
+/**
+ * Function to get all Expense and send response to client.
+ * @param req
+ * @param res
+ */
 var getExpense = function(req, res) {
 	var METHOD_NAME = "[getExpense] ";
 	var response;
-	/*var queryObj = req.query;
-    const schema = Joi.object().keys({
-        limit: Joi.string().required(),
-        skipRecord: Joi.string().required()
-    }).with('limit', 'skipRecord');
-    const schemaResult = Joi.validate(queryObj, schema);
-    if(schemaResult.error !== null) {
-        response = {
-            status: 400,
-            message: constants.BAD_REQUEST
-        };
-        return res.status(400).send(response);
-    }*/
     expenseService.getExpense(function(error, result) {
         if(error) {
             logger.error(METHOD_NAME + error);
@@ -110,8 +101,116 @@ var getExpense = function(req, res) {
             res.status(200).send(response);
         }
 	})
-
 };
+
+/**
+ * Function to edit Expense and send response to client.
+ * @param req
+ * @param res
+ * @returns {*}
+ */
+var editExpense = function(req, res) {
+    var METHOD_NAME = "[editExpense] ";
+    var response;
+    var expenseObj = req.body;
+    const schema = Joi.object().keys({
+        name: Joi.string().required(),
+        description: Joi.string().required(),
+        amount: Joi.number().required(),
+        expenseId: Joi.string().required()
+    }).with('name', 'description', 'amount', 'expenseId');
+
+    const schemaResult = Joi.validate(expenseObj, schema);
+    if(schemaResult.error !== null) {
+        response = {
+            status: 400,
+            message: constants.BAD_REQUEST
+        };
+        return res.status(400).send(response);
+    }
+    expenseObj.updatedDate = new Date();
+    expenseService.editExpense(expenseObj, function(error, result) {
+        if(error) {
+            logger.error(METHOD_NAME + error);
+            response = {
+                status: 500,
+                message: constants.INTERNAL_SERVER_ERROR
+            };
+            res.status(500).send(response);
+        } else if(!_.isEmpty(result)) {
+            response = {
+                status: 500,
+                message: constants.EXPENSE_EDITED_SUCCESS,
+                data: {
+                    expense: true
+                }
+            };
+            res.status(200).send(response);
+        } else {
+            response = {
+                status: 500,
+                message: constants.EXPENSE_EDIT_FAILURE,
+                data: {
+                    expense: false
+                }
+            };
+            res.status(200).send(response);
+        }
+    })
+};
+
+/**
+ * Function to delete Expense and send response to client.
+ * @param req
+ * @param res
+ * @returns {*}
+ */
+var deleteExpense = function(req, res) {
+    var METHOD_NAME = "[deleteExpense] ";
+    var response;
+    var expenseId = req.params.expenseId;
+    const schema = Joi.string().required();
+
+    const schemaResult = Joi.validate(expenseId, schema);
+    if(schemaResult.error !== null) {
+        response = {
+            status: 400,
+            message: constants.BAD_REQUEST
+        };
+        return res.status(400).send(response);
+    }
+    expenseService.deleteExpense(expenseId, function(error, result) {
+        if(error) {
+            logger.error(METHOD_NAME + error);
+            response = {
+                status: 500,
+                message: constants.INTERNAL_SERVER_ERROR
+            };
+            res.status(500).send(response);
+        } else if(!_.isEmpty(result) && result.result.n >= 1) {
+            response = {
+                status: 200,
+                message: constants.EXPENSE_DELETED_SUCCESS,
+                data: {
+                    expense: true
+                }
+            };
+            res.status(200).send(response);
+        } else {
+            response = {
+                status: 200,
+                message: constants.EXPENSE_DELETE_FAILURE,
+                data: {
+                    expense: false
+                }
+            };
+            res.status(200).send(response);
+        }
+    })
+};
+
 
 module.exports.addExpense = addExpense;
 module.exports.getExpense = getExpense;
+module.exports.editExpense = editExpense;
+module.exports.deleteExpense = deleteExpense;

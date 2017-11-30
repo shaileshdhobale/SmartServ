@@ -21,7 +21,7 @@
         border-radius: 3px 3px 0 0;
     }
 </style>
-<div id = "form1" class="container" ng-controller="formCtrl">
+<div id = "form1" class="container">
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
@@ -29,7 +29,7 @@
                     <h2>Manage <b>Expense</b></h2>
                 </div>
                 <div class="col-sm-6" style=" PADDING-LEFT: 165PX;">
-                    <a href="#addExpenseModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Expense</span></a>
+                    <a href="" ng-click="openAddModal()" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Expense</span></a>
 
                 </div>
             </div>
@@ -53,15 +53,57 @@
                 <td>{{expense.createdDate | date: "dd.MM.y h:mm:ss" }}</td>
                 <td>{{expense.updatedDate | date: "dd.MM.y h:mm:ss" }}</td>
                 <td>
-                    <a href="#editExpenseModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit" ng-click="editExpense(expense)">&#xE254;</i></a>
-                    <a href="#deleteExpenseModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit" ng-click="editExpense(expense)">&#xE254;</i></a>
+                    <a href="" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete" ng-click="deleteExpenseDetails(expense._id)">&#xE872;</i></a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
+
+    <!-- Edit Modal HTML -->
+
 </div>
-<!-- Edit Modal HTML -->
+
+
+<div id="editExpenseModal" class="modal fade">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Expense</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text"  maxlength="40" class="form-control" ng-model="editExpenseDetails.name" required>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" maxlength="100" ng-model="editExpenseDetails.description" required></textarea>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" min="1" class="form-control" ng-model="editExpenseDetails.amount" required>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" data-dismiss="modal" value="Update Expense" ng-click="updateExpense()">
+                </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Add Modal HTML -->
 <div id="addExpenseModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -73,14 +115,14 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" ng-model="expense.name" required>
+                        <input type="text" maxlength="40" class="form-control" ng-model="expense.name" required>
                         <span style="float:left;color:red" ng-show="expenseForm.submitted&&expenseForm.name.$error.required || expenseForm.name.$touched &&
                         expenseForm.name.$error.required || expenseForm.description.$dirty && expenseForm.amount.$dirty && expenseForm.name.$error.required">Name is required</span>
                     <span style="float:left;color:red" ng-show="expenseForm.name.$error.pattern">Please enter valid Name</span>
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea class="form-control"  ng-model="expense.description" required></textarea>
+                        <textarea class="form-control" maxlength="100"  ng-model="expense.description" required></textarea>
                         <span style="float:left;color:red" ng-show="expenseForm.submitted&&expenseForm.description.$error.required || expenseForm.description.$touched &&
                         expenseForm.description.$error.required || expenseForm.name.$dirty && expenseForm.amount.$dirty && expenseForm.description.$error.required">Name is required</span>
                     <span style="float:left;color:red" ng-show="expenseForm.description.$error.pattern">Please enter valid Name</span>
@@ -102,40 +144,7 @@
     </div>
 </div>
 
-<!-- Edit Modal HTML -->
-<div id="editExpenseModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form name="expenseForm" novalidate>
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Expense</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" ng-model="{{expense.name}}" required>
-                        
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control"  ng-model="expense.description" required></textarea>
-                        
-                    </div>
-                    <div class="form-group">
-                        <label>Amount</label>
-                        <input type="number" min="1" class="form-control" ng-model="expense.amount" required>
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-success" data-dismiss="modal" value="Add Expense" ng-click="addExpense()">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 <!-- Delete Modal HTML -->
 <div id="deleteExpenseModal" class="modal fade">
     <div class="modal-dialog">
@@ -146,12 +155,12 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete these Records?</p>
+                    <p>Are you sure you want to delete this Record?</p>
                     <p class="text-warning"><small>This action cannot be undone.</small></p>
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-danger" value="Delete">
+                    <input type="submit" class="btn btn-danger" value="Delete" ng-click="deleteExpense(expense._id)">
                 </div>
             </form>
         </div>

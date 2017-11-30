@@ -8,9 +8,5 @@ app.config(['$locationProvider' ,'$routeProvider',
         templateUrl: 'views/Expense.html',
         controller: 'formCtrl'
     })
-    .otherwise('/', {
-        templateUrl : "views/Expense.html",
-        controller: 'formCtrl'
-    });
   }]
 );

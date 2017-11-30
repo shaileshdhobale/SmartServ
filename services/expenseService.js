@@ -37,5 +37,31 @@ var getExpense = function(callback) {
     })
 };
 
+var editExpense = function  (ExpenseObj, callback) {
+    var METHOD_NAME = "[editExpense] ";
+    model.expense.findOneAndUpdate({_id: ExpenseObj.expenseId}, {$set: ExpenseObj}, {new: true}, function (error, result) {
+        if (error) {
+            logger.error(METHOD_NAME + error);
+            callback(error, null);
+        } else {
+            callback(null, result);
+        }
+    });
+};
+
+var deleteExpense = function(expenseId, callback) {
+    var METHOD_NAME = "[deleteExpense] ";
+    model.expense.remove({_id: expenseId}, function(error, result) {
+        if (error) {
+            logger.error(METHOD_NAME + error);
+            callback(error, null);
+        } else {
+            callback(null, result);
+        }
+    })
+};
+
 module.exports.addExpense = addExpense;
 module.exports.getExpense = getExpense;
+module.exports.editExpense = editExpense;
+module.exports.deleteExpense = deleteExpense;
