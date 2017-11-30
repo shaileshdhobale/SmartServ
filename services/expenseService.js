@@ -14,7 +14,6 @@ logger.setLevel(envConfig.logLevel);
 //Function to add appointment in DB
 var addExpense = function  (ExpenseObj, callback) {
 	var METHOD_NAME = "[addExpense] ";
-    var sql = "INSERT INTO Expense SET ?";
     model.expense(ExpenseObj).save(function (error, result) {
         if (error) {
         	logger.error(METHOD_NAME + error);
